@@ -60,3 +60,8 @@ def calc_pro(weight: WeightType):
     min_protein = weight.weight
     max_protein = round(weight.weight*2.5)
     return {"min protein": min_protein, "max protein": max_protein}
+
+
+@app.get("")
+def home():
+    return {"message": "welcome to diet and fitness API"}
