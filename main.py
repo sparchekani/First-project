@@ -17,6 +17,10 @@ class Person_info(BaseModel):
     sex: Literal["male", "female"]
 
 
+class WeightType(BaseModel):
+    weight: float
+
+
 @app.post("/diet")
 def diet_recommendation(person: Person_info):
     height_m = person.height/100
@@ -49,3 +53,10 @@ def calc_bmr(person_info: Person_info):
         bmr = 10*person_info.weight + 6.25 * \
             person_info.height - 5*person_info.age - 161
     return round(bmr + BASIC_ACTIVITY)
+
+
+@app.post("/protein")
+def calc_pro(weight: WeightType):
+    min_protein = weight.weight
+    max_protein = round(weight.weight*2.5)
+    return {"min protein": min_protein, "max protein": max_protein}
