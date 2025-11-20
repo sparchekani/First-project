@@ -1,8 +1,22 @@
+from enum import Enum
 from typing import Literal
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 app = FastAPI()
-BASIC_ACTIVITY = 400
+
+ACTIVITY_FACTOR = {
+    "sedentary": 1.2,
+    "light": 1.375,
+    "moderate": 1.55,
+    "heavy": 1.725
+}
+
+
+class ActivityFactorEnum(Enum):
+    sedentary = "sedentary"
+    light = "light"
+    moderate = "moderate"
+    heavy = "heavy"
 
 
 class Person(BaseModel):
@@ -18,6 +32,7 @@ class Person_info(BaseModel):
     age: int = Field(..., gt=18,
                      description="age must be more than 18 years old")
     sex: Literal["male", "female"]
+    activity_factor: ActivityFactorEnum
 
 
 class WeightType(BaseModel):
@@ -55,7 +70,8 @@ def calc_bmr(person_info: Person_info):
     else:
         bmr = 10*person_info.weight + 6.25 * \
             person_info.height - 5*person_info.age - 161
-    return round(bmr + BASIC_ACTIVITY)
+    activitiy_factor = ACTIVITY_FACTOR[person_info.activity_factor.value]
+    return round(bmr * activitiy_factor)
 
 
 @app.post("/protein")
