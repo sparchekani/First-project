@@ -2,6 +2,7 @@ from typing import Literal
 from fastapi import FastAPI
 from pydantic import BaseModel
 app = FastAPI()
+BASIC_ACTIVITY = 400
 
 
 class Person(BaseModel):
@@ -45,5 +46,6 @@ def calc_bmr(person_info: Person_info):
     if person_info.sex == "male":
         bmr = 10*person_info.weight + 6.25*person_info.height - 5*person_info.age + 5
     else:
-        bmr = 10*person_info.weight + 6.25*person_info.height - 5*person_info.age - 161
-    return bmr
+        bmr = 10*person_info.weight + 6.25 * \
+            person_info.height - 5*person_info.age - 161
+    return round(bmr + BASIC_ACTIVITY)
