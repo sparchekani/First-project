@@ -1,6 +1,6 @@
 from typing import Literal
 from fastapi import FastAPI
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 app = FastAPI()
 BASIC_ACTIVITY = 400
 
@@ -11,9 +11,12 @@ class Person(BaseModel):
 
 
 class Person_info(BaseModel):
-    height: float
-    weight: float
-    age: int
+    height: float = Field(..., gt=20,
+                          description="height must be more than 20 cm")
+    weight: float = Field(..., gt=10,
+                          description="weight mut be more than 10 kg")
+    age: int = Field(..., gt=18,
+                     description="age must be more than 18 years old")
     sex: Literal["male", "female"]
 
 
@@ -62,6 +65,6 @@ def calc_pro(weight: WeightType):
     return {"min protein": min_protein, "max protein": max_protein}
 
 
-@app.get("")
+@app.get("/")
 def home():
     return {"message": "welcome to diet and fitness API"}
