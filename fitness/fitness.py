@@ -87,8 +87,3 @@ def calc_pro(person: PersonInfo):
     fat_calorie = bmr*0.3
     carb_calorie = bmr
     return {"min protein": min_protein, "max protein": max_protein}
-
-
-@router.get("/")
-def home():
-    return {"message": "welcome to diet and fitness API"}
